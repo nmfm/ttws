@@ -61,7 +61,8 @@ const menuTemplate = [
       {
         label: 'Preferences',
         click () {
-          let preferencesWindow = new BrowserWindow({frame: true, parent: mainWindow, modal: true});
+          let preferencesWindow = new BrowserWindow({frame: true, parent: mainWindow, modal: true, webPreferences: {nodeIntegration: true,
+            contextIsolation: false}});
           preferencesWindow.loadURL(`file://${__dirname}/pages/preferences/preferences.html`);
           preferencesWindow.once('ready-to-show', () => {
               preferencesWindow.show();
@@ -86,7 +87,8 @@ let menu = Menu.buildFromTemplate(menuTemplate);
 Menu.setApplicationMenu(menu);
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({width: 800, height: 600, webPreferences: {nodeIntegration: true,
+            contextIsolation: false}});
 
   mainWindow.loadURL(`file://${__dirname}/pages/main/main.html`);
 

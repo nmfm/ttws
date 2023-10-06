@@ -14,7 +14,7 @@ const homeFolder = process.env[(process.platform == 'win32') ? 'USERPROFILE' : '
 
 function getVersion() {
   bus.trigger('watch.progress.start');
-  exec('/usr/local/bin/ttwatch', ['-v'],
+  exec('/home/nuno/bin/ttwatch', ['-v'],
     (error, stdout, stderr) => {
       if (error !== null) {
         console.error(error);
@@ -59,7 +59,7 @@ function getMakeUploadPublic() {
 
 function convertTtbin(item) {
   return new Promise((resolve, reject) => {
-    exec('/usr/local/bin/ttbincnv', ['-t', item.path],
+    exec('/home/nuno/Projectos/Ginásio/ttwatch/ttbincnv', ['-t', item.path],
       (error, stdout, stderr) => {
         if (error !== null) {
           console.error(error);
@@ -135,7 +135,7 @@ setInterval(getVersion, 5000);
 
 bus.on('watch.update.firmware', function() {
   bus.trigger('watch.progress.start');
-  exec('/usr/local/bin/ttwatch', ['--update-fw'],
+  exec('/home/nuno/bin/ttwatch', ['--update-fw'],
     (error, stdout, stderr) => {
       if (error !== null) {
         console.error(error);
@@ -155,7 +155,7 @@ bus.on('watch.update.firmware', function() {
 
 bus.on('watch.update.gps', function() {
   bus.trigger('watch.progress.start');
-  exec('/usr/local/bin/ttwatch', ['--update-gps'],
+  exec('/home/nuno/bin/ttwatch', ['--update-gps'],
     (error, stdout, stderr) => {
       if ((error !== null) || (null !== stderr && '' !== stderr)) {
         console.error(error);
@@ -170,7 +170,7 @@ bus.on('watch.update.gps', function() {
 
 bus.on('watch.update.time', function() {
   bus.trigger('watch.progress.start');
-  exec('/usr/local/bin/ttwatch', ['--set-time'],
+  exec('/home/nuno/bin/ttwatch', ['--set-time'],
     (error, stdout, stderr) => {
       if ((error !== null) || (null !== stderr && '' !== stderr))  {
         console.error(error);
@@ -185,7 +185,7 @@ bus.on('watch.update.time', function() {
 
 bus.on('watch.download.activities', function() {
   bus.trigger('watch.progress.start');
-  exec('/usr/local/bin/ttwatch', ['--activity-store=' + homeFolder + '/.ttws', '--get-activities'],
+  exec('/home/nuno/bin/ttwatch', ['--activity-store=' + homeFolder + '/.ttws', '--get-activities'],
     (error, stdout, stderr) => {
       if (error !== null) {
         console.error(error);

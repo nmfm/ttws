@@ -1,4 +1,5 @@
-const https = require('https');
+let http = require('http');
+
 const storage = require('electron-json-storage');
 
 const bus = riot.observable();
@@ -9,11 +10,12 @@ riot.mount('stravalogo', { bus: bus });
 
 function getToken(requestUrl, response) {
   let options = {
-    hostname: 'ttws-auth-bridge.herokuapp.com',
-    path: '/oauth/token?code=' + requestUrl.query.code + '&client_id=13692',
+    hostname: 'localhost',
+    port: '8765',
+    path: '/oauth/token?code=' + requestUrl.query.code + '&client_id=114355',
     method: 'POST',
   };
-  let req = https.request(options, (res) => {
+  let req = http.request(options, (res) => {
     let data = '';
     console.log(`STATUS: ${res.statusCode}`);
     console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
@@ -22,8 +24,11 @@ function getToken(requestUrl, response) {
       data = data + chunk;
     });
     res.on('end', () => {
+        console.log(data)
       accessToken = JSON.parse(data).access_token;
-      bus.trigger('ttws.connect.strava.success', {'accessToken': accessToken});
+      if (accessToken) {
+        bus.trigger('ttws.connect.strava.success', {'accessToken': accessToken});
+      }
       console.log('No more data in response.');
       response.writeHead(200, {
         'Content-Type': 'text/plain'
@@ -38,7 +43,6 @@ function getToken(requestUrl, response) {
   });
 }
 
-let http = require('http');
 let strava = require('strava-v3');
 let electron = require('electron');
 let url = require('url');
@@ -68,7 +72,7 @@ bus.on('ttws.connect.strava.success', (accessToken) => {
 });
 
 bus.on('ttws.connect.strava', () => {
-  let stravaRequestAccessUrl = 'https://www.strava.com/oauth/authorize?client_id=13692&redirect_uri=http://localhost:' + server.address().port + '/handle/code&response_type=code&scope=write&state=upload';
+  let stravaRequestAccessUrl = 'https://www.strava.com/oauth/authorize?client_id=114355&redirect_uri=http://localhost:' + server.address().port + '/handle/code&response_type=code&scope=activity:write&state=upload';
   electron.shell.openExternal(stravaRequestAccessUrl);
 });
 
